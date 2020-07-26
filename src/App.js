@@ -2,39 +2,34 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Graph } from "react-d3-graph";
+import Search from './Search.js'
+import DBBar from './DBBar.js'
+import GraphData from './GraphData'
 
 const welcome = { greeting: 'Hey', title: 'React',
 };
 
-// graph payload (with minimalist structure)
-const data = {
-  nodes: [{ id: "Harry" }, { id: "Sally" }, { id: "Alice" }],
-  links: [
-      { source: "Harry", target: "Sally" },
-      { source: "Harry", target: "Alice" },
-  ],
-};
-
-// the graph configuration, you only need to pass down properties
-// that you want to override, otherwise default ones will be used
-const myConfig = {
-  nodeHighlightBehavior: true,
-  node: {
-      color: "lightgreen",
-      size: 120,
-      highlightStrokeColor: "blue",
-  },
-  link: {
-      highlightColor: "lightblue",
-  },
-};
+const initialAddress = {
+  host: "localhost",
+  port: 8182
+}
 
 function getTitle(title) {
   return title;
 }
 
-const list = [
-  {
+const List = ({ list }) =>
+list.map(item => <Item key={item.objectID} item={item} />);
+
+const Item = ({ item }) => ( <div>
+  <span>
+  <a href={item.url}>{item.title}</a>
+  </span> <span>{item.author}</span> <span>{item.num_comments}</span> <span>{item.points}</span>
+  </div> );
+  
+function App() {
+  const stories = [
+    {
 title: 'React',
 url: 'https://reactjs.org/', author: 'Jordan Walke', num_comments: 3,
 points: 4,
@@ -46,30 +41,42 @@ points: 5,
 objectID: 1,
 }, ];
 
-function List() {
-  return list.map(function(item) {
-  return (
-  <div key={item.objectID}>
-  <span>
-  <a href={item.url}>{item.title}</a>
-  </span> <span>{item.author}</span> <span>{item.num_comments}</span> <span>{item.points}</span>
-  </div> );
-  });
+const [searchTerm, setSearchTerm] = React.useState('React');
+const [address, setAddress] = React.useState(initialAddress);
+const [graphInfo, setGraphInfo] = React.useState();
+
+const searchedStories = stories.filter(story => story.title.includes(searchTerm));
+
+// A
+const handleSearch = event => {
+  // C
+  console.log(event.target.value);
+  setSearchTerm(event.target.value);
+
+};
+
+const handleAddressChange = event => {
+  const v = event.target.value;
+  setAddress({...address, [event.target.name]: v});
+};
+
+const handleGraphInfo = event => {
+  setGraphInfo();
 }
 
-function App() {
   return (
-    <div>
-      <h1>Hello {getTitle('React')}</h1>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" />
-      <List />
-      <Graph
-    id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
-    data={data}
-    config={myConfig}
-    />;
+    <>
+      <h1>{getTitle('Grafink')}</h1>
+      <Search onSearch={handleSearch} searchTerm={searchTerm} />
+      <List list={searchedStories} />
+      <GraphData />
+    <div className="footer">
+    <div className="container">
+      <DBBar onAddressChange={handleAddressChange} getGraphInfo={handleGraphInfo} address={address} />
     </div>
+  </div>
+    </>
+    
   );
 }
 

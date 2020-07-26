@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.footer
+{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	color: #fff;
+	background: #000;
+}
+
+.container
+{
+	padding: 1em 1.25em;
+	margin: 0 auto;
+}
+
+.inputs_container_top {
+	grid-row: 1 / 2;
+	display: grid;
+	grid-template-columns: auto auto auto auto auto;
+	grid-auto-flow: row;
+}
+
+.input_unit_container {
+	padding: 5px;
+	align-self: center;
+}
