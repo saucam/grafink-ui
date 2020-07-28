@@ -1,18 +1,16 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Graph } from "react-d3-graph";
 import Search from './Search.js'
 import DBBar from './DBBar.js'
 import GraphData from './GraphData'
+import LogsContainer from './LogsContainer'
+import { Context } from './Store'
+import Store from './Store'
+import {get_graph_info} from './GraphInfoBox'
 
 const welcome = { greeting: 'Hey', title: 'React',
 };
-
-const initialAddress = {
-  host: "localhost",
-  port: 8182
-}
 
 function getTitle(title) {
   return title;
@@ -42,8 +40,8 @@ objectID: 1,
 }, ];
 
 const [searchTerm, setSearchTerm] = React.useState('React');
-const [address, setAddress] = React.useState(initialAddress);
 const [graphInfo, setGraphInfo] = React.useState();
+const [state, dispatcher] = React.useContext(Context);
 
 const searchedStories = stories.filter(story => story.title.includes(searchTerm));
 
@@ -55,26 +53,26 @@ const handleSearch = event => {
 
 };
 
-const handleAddressChange = event => {
-  const v = event.target.value;
-  setAddress({...address, [event.target.name]: v});
-};
-
 const handleGraphInfo = event => {
-  setGraphInfo();
+  console.log(state.address);
+  get_graph_info(state.address);
+  // setGraphInfo();
 }
 
   return (
     <>
       <h1>{getTitle('Grafink')}</h1>
+      <Store>
       <Search onSearch={handleSearch} searchTerm={searchTerm} />
       <List list={searchedStories} />
       <GraphData />
+      <LogsContainer />
     <div className="footer">
     <div className="container">
-      <DBBar onAddressChange={handleAddressChange} getGraphInfo={handleGraphInfo} address={address} />
+      <DBBar getGraphInfo={handleGraphInfo} />
     </div>
   </div>
+  </Store>
     </>
     
   );

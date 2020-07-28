@@ -24,8 +24,26 @@ const myConfig = {
     },
   };
 
+const getAsyncGraphData = () =>
+  new Promise(resolve =>
+    setTimeout(
+      () => resolve({ data: { graph: initialData } }),
+      2000
+    )
+  );
+
 function GraphData() {
   const [data, setData] = React.useState(initialData);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    getAsyncGraphData().then(result => {
+      setData(result.data.graph);
+      setIsLoading(false);
+    });
+  }, []);
+
   return <Graph
   id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
   data={data}
