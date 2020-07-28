@@ -7,7 +7,7 @@ import GraphData from './GraphData'
 import LogsContainer from './LogsContainer'
 import { Context } from './Store'
 import Store from './Store'
-import {get_graph_info} from './GraphInfoBox'
+
 
 const welcome = { greeting: 'Hey', title: 'React',
 };
@@ -41,7 +41,6 @@ objectID: 1,
 
 const [searchTerm, setSearchTerm] = React.useState('React');
 const [graphInfo, setGraphInfo] = React.useState();
-const [state, dispatcher] = React.useContext(Context);
 
 const searchedStories = stories.filter(story => story.title.includes(searchTerm));
 
@@ -53,12 +52,6 @@ const handleSearch = event => {
 
 };
 
-const handleGraphInfo = event => {
-  console.log(state.address);
-  get_graph_info(state.address);
-  // setGraphInfo();
-}
-
   return (
     <>
       <h1>{getTitle('Grafink')}</h1>
@@ -66,10 +59,9 @@ const handleGraphInfo = event => {
       <Search onSearch={handleSearch} searchTerm={searchTerm} />
       <List list={searchedStories} />
       <GraphData />
-      <LogsContainer />
     <div className="footer">
     <div className="container">
-      <DBBar getGraphInfo={handleGraphInfo} />
+      <DBBar />
     </div>
   </div>
   </Store>

@@ -4,7 +4,7 @@ import React, {createContext, useReducer} from "react";
 import Reducer from './Reducer'
 
 const initialAddress = {
-    host: "",
+    host: "localhost",
     port: 8182
   }
 
